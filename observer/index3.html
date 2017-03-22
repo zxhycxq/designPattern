@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no">
+    <title>Title</title>
+    <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <script src="//cdn.bootcss.com/jquery/1.12.0/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</head>
+<body>
+      <h2>你好</h2>
+<h1>这是社么</h1>
+<p>不可以显圣达菲示12</p>
+<em>你说的佛i</em>
+</body>
+<script>
+    var observer = {
+        //订阅
+        addSubscriber: function (callback) {
+            this.subscribers[this.subscribers.length] = callback;
+        },
+        //退订
+        removeSubscriber: function (callback) {
+            for (var i = 0; i < this.subscribers.length; i++) {
+                if (this.subscribers[i] === callback) {
+                    delete (this.subscribers[i]);
+                }
+            }
+        },
+        //发布
+        publish: function (what) {
+            for (var i = 0; i < this.subscribers.length; i++) {
+                if (typeof this.subscribers[i] === 'function') {
+                    this.subscribers[i] (what);
+                }
+            }
+        },
+        // 将对象o具有观察者功能
+        make: function (o) {
+            for (var i in this) {
+                o[i] = this[i];
+                o.subscribers = [];
+            }
+        }
+    };
+    var blogger = {
+        recommend: function (id) {
+            var msg = 'dudu 推荐了的帖子:' + id;
+            this.publish(msg);
+        }
+    };
+
+    var user = {
+        vote: function (id) {
+            var msg = '有人投票了!ID=' + id;
+            this.publish(msg);
+        }
+    };
+
+    observer.make(blogger);
+    observer.make(user);
+
+    var tom = {
+        read: function (what) {
+            console.log('Tom看到了如下信息：' + what)
+        }
+    };
+
+    var mm = {
+        show: function (what) {
+            console.log('mm看到了如下信息：' + what)
+        }
+    };
+    // 订阅
+    blogger.addSubscriber(tom.read);
+    blogger.addSubscriber(mm.show);
+    blogger.recommend(123); //调用发布
+
+    //退订
+    blogger.removeSubscriber(mm.show);
+    blogger.recommend(456); //调用发布
+
+    //另外一个对象的订阅
+    user.addSubscriber(mm.show);
+    user.vote(789); //调用发布
+</script>
+</html>

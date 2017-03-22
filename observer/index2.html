@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no">
+    <title>Title</title>
+    <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <script src="//cdn.bootcss.com/jquery/1.12.0/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+</body>
+<script type="">
+    function Observer() {
+        this.fns = [];
+    }
+    Observer.prototype = {
+        subscribe: function (fn) {
+            this.fns.push (fn);
+        },
+        unsubscribe: function (fn) {
+            this.fns = this.fns.filter (
+                function (el) {
+                    if (el !== fn) {
+                        return el;
+                    }
+                }
+            );
+        },
+        update: function (o, thisObj) {
+            var scope = thisObj || window;
+            this.fns.forEach (
+                function (el) {
+                    el.call (scope, o);
+                }
+            );
+        }
+    };
+
+    //测试
+    var o = new Observer;
+    var f1 = function (data) {
+        console.log ('Robbin: ' + data + ', 赶紧干活了！');
+    };
+
+    var f2 = function (data) {
+        console.log ('Randall: ' + data + ', 找他加点工资去！');
+    };
+
+    o.subscribe (f1);
+    o.subscribe (f2);
+
+    o.update ("Tom回来了！")
+
+    //退订f1
+    o.unsubscribe (f1);
+    //再来验证
+    o.update ("Tom回来了！");
+</script>
+</html>
